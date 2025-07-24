@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procare</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's slate-50 */
+            color: #1e293b; /* Tailwind's slate-800 */
+        }
+        /* Custom gradient for hero section background */
+        .hero-gradient-bg {
+            background: linear-gradient(135deg, #0a2342 0%, #1a4d80 100%); /* Dark blue gradient */
+            position: relative;
+            overflow: hidden;
+        }
+        /* Overlay for subtle pattern */
+        .hero-gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4h-2v4H0v2h2v4h4v-4h2v-2H6zm0 20v-4h-2v4H0v2h2v4h4v-4h2v-2H6zM36 4v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 4v-4h-2v4H0v2h2v4h4v-4h2v-2H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            background-repeat: repeat;
+            opacity: 0.8;
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2; /* Ensure content is above the pattern overlay */
+        }
+
+        .btn-primary {
+            @apply bg-blue-600 text-white font-semibold px-8 py-4 rounded-full shadow-xl hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300;
+        }
+        .btn-secondary {
+            @apply bg-transparent text-white border-2 border-white px-8 py-4 rounded-full shadow-xl hover:bg-white hover:text-blue-600 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300;
+        }
+        .section-heading {
+            @apply text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-4;
+        }
+        .section-subheading {
+            @apply text-lg md:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto;
+        }
+
+        /* Keyframe for fade-in-up animation */
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+        .animate-fade-in-up.delay-200 {
+            animation-delay: 0.2s;
+        }
+        .animate-fade-in-up.delay-400 {
+            animation-delay: 0.4s;
+        }
+
+        /* Custom underline for headings */
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #3b82f6; /* Tailwind blue-500 */
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* Star rating SVG styles */
+        .star-filled {
+            fill: #facc15; /* Tailwind amber-400 */
+        }
+        .star-empty {
+            fill: #d1d5db; /* Tailwind gray-300 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-4 sticky top-0 z-50">
+        <nav class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center text-3xl font-extrabold text-gray-900 tracking-tight">
+                <img src="assets/png.png" alt="Logo" class="w-10 h-10 rounded-full mr-2">
+                Procare
+            </a>
+            <ul class="hidden md:flex space-x-10">
+                <li><a href="#home" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-200 ease-in-out">Home</a></li>
+                <li><a href="#about" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-200 ease-in-out">About</a></li>
+                <li><a href="#services" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-200 ease-in-out">Services</a></li>
+                <li><a href="#testimonials" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-200 ease-in-out">Testimonials</a></li>
+                <li><a href="#contact" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-200 ease-in-out">Contact</a></li>
+            </ul>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-8">
+            <button id="close-mobile-menu" class="absolute top-6 right-6 text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100">
+                <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <ul class="text-center text-3xl space-y-8">
+                <li><a href="#home" class="text-gray-800 hover:text-blue-600 font-medium transition duration-200" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Home</a></li>
+                <li><a href="#about" class="text-gray-800 hover:text-blue-600 font-medium transition duration-200" onclick="document.getElementById('mobile-menu').classList.add('hidden')">About</a></li>
+                <li><a href="#services" class="text-gray-800 hover:text-blue-600 font-medium transition duration-200" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Services</a></li>
+                <li><a href="#testimonials" class="text-gray-800 hover:text-blue-600 font-medium transition duration-200" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Testimonials</a></li>
+                <li><a href="#contact" class="text-gray-800 hover:text-blue-600 font-medium transition duration-200" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient-bg text-white py-24 md:py-40 text-center rounded-b-3xl shadow-2xl">
+        <div class="container mx-auto px-6 hero-content">
+            <h1 class="text-4xl md:text-7xl font-extrabold leading-tight mb-6 py-10 animate-fade-in-up drop-shadow-lg">
+                Expert Physiotherapy Care
+            </h1>
+            <p class="text-lg md:text-xl mb-12 max-w-3xl mx-auto opacity-95 animate-fade-in-up delay-200 drop-shadow-md">
+                Procare  is dedicated toward expert advice, tips, and exercises to help you recover, stay active, and live pain-free. Whether you're dealing with an injury, managing chronic pain, or simply looking to improve your mobility, we offers professional guidance to support your journey to better health.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="#contact" class="btn-primary animate-fade-in-up delay-400 hover:text-green-500">Book Appointment</a>
+                <a href="#services" class="btn-secondary animate-fade-in-up delay-500 hover:text-green-400">Our Services</a>
+            </div>
+        </div>
+    </section>
+
+   <!-- About Us Section -->
+<section id="about" class="py-10 md:py-32 bg-gray-50">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
+        
+        <!-- Left Column: Doctor Image & Degrees -->
+        <div class="md:w-1/2 flex flex-col items-center">
+            <div class="relative w-full h-70 max-w-md rounded-3xl shadow-2xl overflow-hidden p-4 mb-4 bg-gray-50">
+                <img src="assets/dr.jpeg" alt="Dr. Name" class="rounded-3xl w-full object-cover" style="max-height: 400px;">
+            </div>
+            <div class="text-center">
+                <h3 class="text-xl font-bold text-gray-800">Dr. Pawan Kumar</h3>
+                <p class="text-gray-600">BPT, FNMT, Certified Dry Needling Expert, <br>
+                     Myo-Facial Release, Pelvic Floor</p>
+                <p class="text-gray-600">5+ Years of Experience</p>
+            </div>
+        </div>
+
+        <!-- Right Column: About Content -->
+        <div class="md:w-1/2 text-center md:text-left">
+            <h2 class="text-xl md:text-3xl font-extrabold leading-tight mb-6 animate-fade-in-up drop-shadow-lg">About Procare</h2>
+            <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                At Procare, we believe in a holistic approach to physiotherapy that treats not just the symptoms but the root cause of your pain or mobility issues.
+            </p>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                Our team of experienced physiotherapists is dedicated to providing personalized care using evidence-based techniques and the latest advancements in physiotherapy. With over 5 years of experience, we've helped thousands of patients recover from injuries, manage chronic conditions, and improve their overall quality of life.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-lg text-gray-700 mb-8">
+                <p class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Certified Expert</p>
+                <p class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Modern Techniques</p>
+                <p class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Personalized Care</p>
+                <p class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Proven Results</p>
+            </div>
+            <a href="#contact" class="btn-primary text-blue-400 hover:text-green-500">Book Appointment</a>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <div class="container mx-auto px-6 mt-16">
+        <h3 class="text-3xl font-bold text-center mb-8 py-10">Gallery</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <img src="assets/img1.jpg" class="rounded-lg shadow-md hover:scale-105 transition-transform duration-300" alt="Gallery 1">
+            <img src="assets/img2.jpeg" class="rounded-lg shadow-md hover:scale-105 transition-transform duration-300" alt="Gallery 2">
+            <img src="assets/gallery3.jpg" class="rounded-lg shadow-md hover:scale-105 transition-transform duration-300" alt="Gallery 3">
+            <img src="assets/gallery4.jpg" class="rounded-lg shadow-md hover:scale-105 transition-transform duration-300" alt="Gallery 4">
+        </div>
+    </div>
+</section>
+
+
+<!-- Services Section -->
+<section id="services" class="py-11 md:py-13 bg-white text-center">
+    <div class="container mx-auto px-6">
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-6 animate-fade-in-up drop-shadow-lg">Our Services</h1>
+        <p class="section-subheading py-10">
+            We provide specialized physiotherapy services designed to treat a wide range of conditions and enhance your overall well-being.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <!-- 1. Orthopedic Conditions -->
+            <div class="group bg-red-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-red-100 to-red-200">
+                <div class="text-red-500 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-red-500 mb-4 text-center">Orthopedic Conditions</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Treatment and rehabilitation for bone, joint, and ligament injuries, including post-fracture care, joint replacements, and arthritis management.
+                </p>
+            </div>
+
+            <!-- 2. Neuro Rehabilitation -->
+            <div class="group bg-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-gray-100 to-gray-200">
+                <div class="text-gray-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">Neuro Rehabilitation</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Tailored programs to restore mobility and independence in patients with stroke, spinal cord injuries, Parkinson's, and other neurological disorders.
+                </p>
+            </div>
+
+            <!-- 3. Sports Rehab -->
+            <div class="group bg-blue-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-blue-100 to-blue-200">
+                <div class="text-blue-400 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-blue-500 mb-4 text-center">Sports Rehabilitation</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Injury recovery and performance enhancement plans for athletes to ensure safe return to sport and prevent re-injury.
+                </p>
+            </div>
+
+            <!-- 4. Musculoskeletal Correction -->
+            <div class="group bg-blue-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-blue-100 to-blue-200">
+                <div class="text-blue-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-blue-800 mb-4 text-center">Musculoskeletal Correction</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Corrective therapies for muscle imbalances, joint stiffness, and post-injury recovery to restore optimal body mechanics.
+                </p>
+            </div>
+
+            <!-- 5. Women’s Health -->
+            <div class="group bg-pink-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-pink-100 to-pink-200">
+                <div class="text-pink-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 0112 14a4 4 0 016.879 3.804M12 14v8" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-pink-800 mb-4 text-center">Women’s Health</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Specialized physiotherapy for prenatal, postnatal, pelvic floor rehabilitation, and other women-specific health concerns.
+                </p>
+            </div>
+
+            <!-- 6. Postural Correction -->
+            <div class="group bg-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-gray-200 to-gray-300">
+                <div class="text-black-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4z" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-black-800 mb-4 text-center">Postural Correction</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Assessment and treatment of poor posture to reduce pain, improve alignment, and prevent long-term musculoskeletal problems.
+                </p>
+            </div>
+
+            <!-- 7. Pain Management -->
+            <div class="group bg-orange-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-orange-100 to-orange-200">
+                <div class="text-orange-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-orange-600 mb-4 text-center">Pain Management</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Evidence-based therapies to relieve acute and chronic pain through exercises, manual therapy, and advanced modalities.
+                </p>
+            </div>
+
+            <!-- 8. Therapeutic Exercises -->
+            <div class="group bg-green-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-green-100 to-green-200">
+                <div class="text-green-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-green-800 mb-4 text-center">Therapeutic Exercises</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Customized exercise programs to restore mobility, strength, and endurance while aiding in recovery and injury prevention.
+                </p>
+            </div>
+
+            <!-- 9. Neonatal Care -->
+            <div class="group bg-purple-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:bg-gradient-to-br from-purple-100 to-purple-200">
+                <div class="text-purple-600 mb-6 transition-transform duration-300 group-hover:scale-110">
+                    <svg class="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-purple-800 mb-4 text-center">Neonatal Care</h3>
+                <p class="text-gray-700 text-center leading-relaxed">
+                    Gentle and safe physiotherapy programs for newborns to address conditions like torticollis, delayed milestones, and motor skill development.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+  
+
+   <!-- Testimonials Section -->
+<section id="testimonials" class="py-10 md:py-12 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <h2 class="text-2xl md:text-4xl font-extrabold leading-tight mb-3 animate-fade-in-up drop-shadow-lg">
+            What Our Patients Say
+        </h2>
+        <p class="section-subheading py-10">
+            Hear from our patients about their experiences and success stories with HealthMotion Physiotherapy.
+        </p>
+
+        <!-- Scrollable Wrapper -->
+        <div class="flex space-x-6 overflow-x-auto scrollbar-hide pb-8 snap-x snap-mandatory">
+            <!-- Testimonial Card 1 -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[400px] snap-center">
+                <div class="flex items-center mb-6">
+                    <svg class="w-16 h-16 rounded-full mr-4 text-blue-600 bg-blue-100 p-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg">Mukesh Chaudhary</p>
+                        <p class="text-sm text-gray-600">Cervical Pain</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed">
+                    "I had been struggling with severe cervical pain for a long time, and after just 3 physiotherapy sessions here, I feel amazing relief! The therapist was very professional, explained every step clearly, and gave me confidence throughout the treatment. The exercises and techniques used were highly effective. I truly appreciate the care and attention given to my recovery. Highly recommended for anyone dealing with neck or cervical pain!"
+                </p>
+                <div class="flex">
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                </div>
+            </div>
+
+            <!-- Testimonial Card 2 -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[400px] snap-center">
+                <div class="flex items-center mb-6">
+                    <svg class="w-16 h-16 rounded-full mr-4 text-blue-600 bg-blue-100 p-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg">Shreya Rai</p>
+                        <p class="text-sm text-gray-600">Chronic Back Pain</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed">
+                    "I had been struggling with constant back and neck pain for months, and after trying everything else, I finally booked an appointment here. I’m so glad I did! The physiotherapist was extremely knowledgeable, patient, and professional. They not only treated the pain effectively but also helped me understand the root cause and taught me exercises to prevent it from coming back. I felt real relief after just a few sessions. Highly recommended for anyone dealing with chronic pain or stiffness!"
+                </p>
+                <div class="flex">
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-empty" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                </div>
+            </div>
+      <!-- Testimonial Card 3 -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[400px] snap-center">
+                <div class="flex items-center mb-6">
+                    <svg class="w-16 h-16 rounded-full mr-4 text-blue-600 bg-blue-100 p-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg">Aman Bhagat</p>
+                        <p class="text-sm text-gray-600">Post-Surgery Recovery</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed">
+                    "I had an excellent experience, from the first consultation, I was impressed by the professionalism, knowledge, and care shown by the physiotherapist. The treatment plan was tailored to my specific needs and throughout the sessions, I received consistent support and guidance. Each visit brought noticeable improvement. The environment was clean, well-maintained, and welcoming.I would confidently recommend this clinic to anyone in need of physiotherapy – whether for injury recovery, pain relief, or long-term posture correction. You will be in good hands"
+                </p>
+                <div class="flex">
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                </div>
+            </div>
+
+            <!-- Testimonial Card 4 -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[400px] snap-center">
+                <div class="flex items-center mb-6">
+                    <svg class="w-16 h-16 rounded-full mr-4 text-blue-600 bg-blue-100 p-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg">Gaurav Prajapat</p>
+                        <p class="text-sm text-gray-600">Scitica Patient</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed">
+                    "I had an Amazing experience at Procare. I Was suffering from sciatica pain from past 2 years and Dr. Pawan assessment and treatment relieved me within 10 days. Now I am able to my daily routine pain-free. I would definitely recommend procare to anyone suffering from any chronic pain"
+                </p>
+                <div class="flex">
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                </div>
+            </div>
+
+             <!-- Testimonial Card 5 -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[400px] snap-center">
+                <div class="flex items-center mb-6">
+                    <svg class="w-16 h-16 rounded-full mr-4 text-blue-600 bg-blue-100 p-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg">Pankaj Kumar</p>
+                        <p class="text-sm text-gray-600">Neck Pain</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed">
+                    "I would 100% recommend the clinic to any of my friends and family. Very friendly staff and great results I would also like to give a massive thank you to Dr Pawan Kumar after a few days of work on my neck and my neck has never felt this good in a long time.Superb care and personal service with a high level of professionalism from Dr pawan Knowledgeable, helpful and honest about the pros and cons of various options for treatment."
+                </p>
+                <div class="flex">
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                </div>
+            </div>
+             <!-- Testimonial Card 6 -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[400px] snap-center">
+                <div class="flex items-center mb-6">
+                    <svg class="w-16 h-16 rounded-full mr-4 text-blue-600 bg-blue-100 p-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg">Preeti Kumari</p>
+                        <p class="text-sm text-gray-600">Ankylosing Spondylitis</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed">
+                    "Dr. Pawan is amazing! He helped me in every way he could and was so kind and patient with me. He made sure I felt comfortable and really listened to my concerns. He supported me throughout my journey with ankylosing spondylitis and provided the best care possible. I’m so grateful for his support and dedication. I’d highly recommend him to anyone looking for a caring and dedicated doctor."
+                </p>
+                <div class="flex">
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                    <svg class="w-5 h-5 star-filled" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/></svg>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-10 md:py-12 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl md:text-4xl font-extrabold leading-tight mb-3 animate-fade-in-up drop-shadow-lg">Book Appointment</h2>
+            <p class="section-subheading py-10">Have questions or ready to schedule your appointment? Reach out to us and we'll get back to you as soon as possible.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-4xl mx-auto bg-gray-50 p-10 rounded-2xl shadow-2xl border border-gray-100">
+                <!-- Contact Form -->
+                <div>
+                     <form id="contact-form"
+                     class="space-y-6"
+                     action="https://formsubmit.co/procare309@gmail.com" 
+                     method="POST">
+                     <input type="hidden" name="_next" value="">
+                     <input type="hidden" name="_captcha" value="false">
+                     <input type="hidden" name="_template" value="table">
+                    <div>
+                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" placeholder="Your Name" required>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" placeholder="your@example.com" required>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone (Optional)</label>
+                        <input type="tel" id="phone" name="phone" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" placeholder="e.g., +1 (555) 123-4567">
+                    </div>
+                    <div>
+                        <label for="preferred-date" class="block text-gray-700 text-sm font-bold mb-2">Preferred Date (Optional)</label>
+                        <input type="date" id="preferred-date" name="preferred-date" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Tell us about your Problem</label>
+                        <textarea id="message" name="message" rows="6" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" placeholder="Describe your concerns or questions here..." required></textarea>
+                    </div>
+                    <div id="form-message" class="text-center mt-6 text-base font-semibold"></div>
+                    <div class="text-center">
+                        <button type="submit" class="bg-green-400 rounded-2xl px-3 text-black-800 hover:bg-green-700 hover:text-white">Submit Request</button>
+                    </div>
+                </form>
+                <script src="thank.js" defer></script>
+                </div>
+
+                <!-- Get In Touch Info -->
+                <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Get In Touch</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <svg class="w-7 h-7 text-blue-600 mr-4 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-700">Our Location</p>
+                                <p class="text-gray-600">12/1 Mithapur Extension Part-3, Badarpur, New Delhi-44</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-7 h-7 text-blue-600 mr-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.25 1.02L6.62 10.79z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-700">Phone Number</p>
+                                <p class="text-gray-600">+91 7503251336</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-7 h-7 text-blue-600 mr-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-700">Email Address</p>
+                                <p class="text-gray-600">procare309@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <svg class="w-7 h-7 text-blue-600 mr-4 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V5z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-700">Working Hours</p>
+                                <p class="text-gray-600">Monday - Sunday: 10:00 AM - 2:00 PM</p>
+                                <p class="text-gray-600">Monday - Sunday: 4:00 PM - 8:00 PM</p>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Follow Us</h3>
+                    <div class="flex space-x-6">
+                        <a href="https://www.facebook.com/profile.php?id=100003845822656" class="text-blue-600 hover:text-blue-800 transition duration-200">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-3 7h-2c-.404 0-.649.481-.649.95v1.05h3l-.353 3h-2.647v7h-3v-7h-2v-3h2v-1.109c0-1.794 1.127-2.791 3.238-2.791h2.762v3z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@Procarept" class="text-red-600 hover:text-red-800 transition duration-200" aria-label="YouTube">
+                         <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M549.7 124.1c-6.3-23.7-24.9-42.3-48.6-48.6C458.4 64 288 64 288 64s-170.4 0-213.1 11.5c-23.7 6.3-42.3 24.9-48.6 48.6C16.8 167.7 16 208.6 16 256s.8 88.3 10.3 131.9c6.3 23.7 24.9 42.3 48.6 48.6C117.6 448 288 448 288 448s170.4 0 213.1-11.5c23.7-6.3 42.3-24.9 48.6-48.6 9.5-43.6 10.3-84.5 10.3-131.9s-.8-88.3-10.3-131.9zM232 334.7V177.3L361.3 256 232 334.7z"/>
+                         </svg>
+                        </a>
+
+                        <a href="https://www.instagram.com/procare.pt/" class="text-blue-600 hover:text-blue-800 transition duration-200">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.251-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.668.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.668-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.44-.644-1.44-1.44s.644-1.44 1.44-1.44 1.44.644 1.44 1.44-.644 1.44-1.44 1.44z"/></svg>
+                        </a>
+                        <a href="https://www.google.com/maps/place/Procare/@28.4951148,77.324636,17z/data=!4m15!1m8!3m7!1s0x390ce776829718bb:0x373baf91daaae3e1!2sProcare!8m2!3d28.4951112!4d77.3246802!10e5!16s%2Fg%2F11ty5tsr6b!3m5!1s0x390ce776829718bb:0x373baf91daaae3e1!8m2!3d28.4951112!4d77.3246802!16s%2Fg%2F11ty5tsr6b?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D" class="text-green-600 hover:text-green-800 transition duration-200" aria-label="Location">
+                          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M168 0C75.1 0 0 75.1 0 168c0 87.6 128.3 304.7 160 344.5 2.5 3.1 6.2 4.9 10 4.9s7.5-1.8 10-4.9c31.7-39.8 160-256.9 160-344.5C336 75.1 260.9 0 168 0zm0 248c-44.2 0-80-35.8-80-80s35.8-80 80-80 80 35.8 80 80-35.8 80-80 80z"/>
+                          </svg>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+   <footer class="bg-gray-800 text-white py-12 text-center rounded-t-3xl shadow-inner">
+    <div class="container mx-auto px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-left">
+        
+        <!-- Column 1: Logo and Description -->
+        <div>
+            <a href="#" class="flex items-center text-3xl font-extrabold text-blue-400 tracking-tight mb-4">
+                <img src="assets/png.png" alt="Logo" class="w-10 h-10 rounded-full mr-2">
+                Procare
+            </a>
+            <p class="text-gray-300 mb-4 leading-relaxed">
+                Providing expert physiotherapy care to help you move better, feel better, and live better.
+            </p>
+            <p class="text-gray-400 text-sm">&copy; 2025 Procare. All rights reserved.</p>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div>
+            <h3 class="text-xl font-bold text-white mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+                <li><a href="#home" class="text-gray-300 hover:text-blue-400 transition duration-200">Home</a></li>
+                <li><a href="#about" class="text-gray-300 hover:text-blue-400 transition duration-200">About Us</a></li>
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Services</a></li>
+                <li><a href="#testimonials" class="text-gray-300 hover:text-blue-400 transition duration-200">Testimonials</a></li>
+                <li><a href="#contact" class="text-gray-300 hover:text-blue-400 transition duration-200">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div>
+            <h3 class="text-xl font-bold text-white mb-4">Services</h3>
+            <ul class="space-y-2">
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Sports Rehabilitation</a></li>
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Manual Therapy</a></li>
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Therapeutic Exercise</a></li>
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Postural Correction</a></li>
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Pain Management</a></li>
+                <li><a href="#services" class="text-gray-300 hover:text-blue-400 transition duration-200">Neurological Rehabilitation</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 4: Contact Info -->
+        <div>
+            <h3 class="text-xl font-bold text-white mb-4">Contact Us</h3>
+            <p class="text-gray-300 mb-2">📍 12/1, Mithapur Extn. Part-3, Badarpur, New Delhi</p>
+            <p class="text-gray-300 mb-2">📞 +91 75032 51336</p>
+            <p class="text-gray-300 mb-4">✉️ procare309@gmail.com</p>
+            <div class="flex space-x-4">
+                <a href="#" class="text-blue-400 hover:text-blue-300 transition duration-200">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-blue-400 hover:text-blue-300 transition duration-200">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="text-blue-400 hover:text-blue-300 transition duration-200">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+
+        // Close mobile menu when a link is clicked (handled by inline onclick for simplicity)
+        document.addEventListener('click', function(event) {
+            const isClickInsideMobileMenu = mobileMenu.contains(event.target);
+            const isClickOnMobileMenuButton = mobileMenuButton.contains(event.target);
+
+            if (!isClickInsideMobileMenu && !isClickOnMobileMenuButton && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/917503251336" 
+      class="fixed left-4 top-1/2 transform -translate-y-1/2 bg-green-500 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-600 transition duration-300 z-50"
+      target="_blank" aria-label="Chat on WhatsApp">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-7 h-7 fill-current">
+        <path d="M16 .3C7.2.3.2 7.3.2 16.1c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.1c2.3 1.2 4.9 1.8 7.6 1.8 8.8 0 15.8-7 15.8-15.8S24.8.3 16 .3zm0 28.7c-2.3 0-4.5-.6-6.5-1.7l-.5-.3-4.9 1.3 1.3-4.7-.3-.5c-1.3-2-1.9-4.2-1.9-6.6 0-7 5.7-12.7 12.7-12.7s12.7 5.7 12.7 12.7S23 29 16 29zm6.7-9c-.4-.2-2.3-1.1-2.6-1.2s-.6-.2-.9.2c-.3.4-1 .9-1.2 1.1-.2.2-.4.2-.8 0s-1.6-.6-3.1-2c-1.2-1-2-2.3-2.2-2.6s0-.6.2-.8c.2-.2.4-.4.6-.6.2-.2.3-.3.4-.5.1-.2.1-.4 0-.6-.1-.2-.9-2.2-1.2-3-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.7 1.2 3.1 1.4 3.3c.2.3 2.3 3.5 5.6 5 3.3 1.5 3.3 1 3.9 1 .6 0 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6s-.4-.2-.8-.4z"/>
+      </svg>
+    </a>
+
+</body>
+</html>
